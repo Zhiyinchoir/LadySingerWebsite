@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>女子合唱团 · Lady Singer Calgary Society</title>
+<meta name="description" content="女子合唱团 Lady Singer Calgary Society — founded in 2024 by a group of passionate women singers from diverse professional backgrounds.">
+<meta property="og:title" content="女子合唱团 · Lady Singer Calgary Society">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#352656;--ink2:#4F3B7A;
+  --gold:#C4B0EE;--gold-lt:#E2D8FA;--gold-dk:#8467C2;
+  --cream:#F9F6FE;--parchment:#EFE9FB;
+  --crimson:#7453B8;--muted:#9A90B0;--border:#DDD3F2;
+  --charcoal:#3E3654;
+  --nav-h:68px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;overflow-x:hidden}
+
+.cursor-glow{pointer-events:none;position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(196,176,238,0.08) 0%,transparent 70%);transform:translate(-50%,-50%);z-index:0;top:0;left:0}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;transition:background 0.4s,box-shadow 0.4s}
+nav.scrolled{background:rgba(53,38,86,0.97);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(196,176,238,0.25)}
+nav.top{background:transparent}
+.nav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer}
+.nav-logo{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:0.85rem;color:var(--gold);font-weight:700;transition:transform 0.3s}
+.nav-brand:hover .nav-logo{transform:rotate(15deg)}
+.nav-brand-text .zh{font-family:'Noto Serif SC',serif;font-size:1.05rem;color:#fff;font-weight:600;letter-spacing:0.06em;display:block;line-height:1.2}
+.nav-brand-text .en{font-size:0.62rem;color:rgba(255,255,255,0.45);letter-spacing:0.16em;text-transform:uppercase}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;padding:8px 16px;border-radius:4px;transition:color 0.2s,background 0.2s;position:relative;cursor:pointer}
+.nav-links a::after{content:'';position:absolute;bottom:4px;left:16px;right:16px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform 0.25s;transform-origin:left}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--gold-lt)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;border:none;background:transparent}
+.hamburger span{display:block;width:22px;height:1.5px;background:#fff;transition:all 0.3s;border-radius:2px}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(53,38,86,0.98);backdrop-filter:blur(20px);padding:1.5rem 5vw 2rem;transform:translateY(calc(-100% - var(--nav-h)));transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:999;border-bottom:1px solid rgba(196,176,238,0.25)}
+.mobile-menu.open{transform:translateY(0)}
+.mobile-menu a{display:block;color:rgba(255,255,255,0.8);text-decoration:none;font-size:1.1rem;padding:0.9rem 0;border-bottom:1px solid rgba(255,255,255,0.07);letter-spacing:0.06em;transition:color 0.2s,padding 0.2s;cursor:pointer}
+.mobile-menu a:hover{color:var(--gold-lt);padding-left:8px}
+
+.hero{position:relative;min-height:100vh;background:radial-gradient(ellipse at 75% 30%,#8A70C8 0%,var(--ink2) 40%,var(--ink) 100%);display:flex;align-items:center;overflow:hidden}
+.hero-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%}
+.hero-content{position:relative;z-index:2;padding:0 10vw;max-width:1100px;width:100%}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:0.7rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.2s,transform 0.8s 0.2s}
+.hero-eyebrow.show{opacity:1;transform:none}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;height:1px;background:var(--gold);width:28px}
+.hero-h1{font-family:'Noto Serif SC',serif;font-size:clamp(3.2rem,8vw,7rem);font-weight:900;color:#fff;line-height:1.05;letter-spacing:-0.01em;opacity:0;transform:translateY(30px);transition:opacity 0.9s 0.4s,transform 0.9s 0.4s}
+.hero-h1.show{opacity:1;transform:none}
+.hero-h1 .gold{color:var(--gold)}
+.hero-h1 .thin{font-weight:300;color:rgba(255,255,255,0.55);font-size:0.4em;display:block;letter-spacing:0.12em;margin-top:0.5em;font-family:'Inter',sans-serif}
+.hero-desc{font-size:clamp(0.95rem,1.5vw,1.1rem);color:rgba(255,255,255,0.6);max-width:520px;margin-top:1.8rem;line-height:1.8;opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.7s,transform 0.8s 0.7s}
+.hero-desc.show{opacity:1;transform:none}
+.hero-btns{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.9s,transform 0.8s 0.9s}
+.hero-btns.show{opacity:1;transform:none}
+.btn-primary{background:var(--gold);color:var(--ink);padding:0.85rem 2.2rem;border-radius:3px;font-size:0.82rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.25s;position:relative;overflow:hidden;display:inline-block}
+.btn-primary::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.18);transform:translateX(-100%);transition:transform 0.35s}
+.btn-primary:hover::before{transform:translateX(0)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,176,238,0.4)}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,0.35);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0;transition:opacity 0.8s 1.4s;cursor:pointer;z-index:2}
+.hero-scroll.show{opacity:1}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(196,176,238,0.7),transparent);animation:scroll-pulse 2s ease-in-out infinite}
+@keyframes scroll-pulse{0%,100%{opacity:0.3;transform:scaleY(0.8)}50%{opacity:1;transform:scaleY(1)}}
+
+.section{padding:7rem 10vw}
+.section-eyebrow{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:1rem}
+.section-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:1.5rem}
+.section-title em{font-style:normal;color:var(--crimson)}
+
+.intro{background:var(--cream)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:start;margin-top:1rem}
+.intro-col{background:#fff;border:1px solid var(--border);border-radius:10px;padding:2.8rem 2.5rem;position:relative;overflow:hidden;box-shadow:0 10px 40px rgba(116,83,184,0.07)}
+.intro-col::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.intro-col h3{font-family:'Noto Serif SC',serif;font-size:1.45rem;font-weight:700;color:var(--ink);margin-bottom:1.4rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border)}
+.intro-col p{color:var(--charcoal);font-size:0.96rem;line-height:1.95}
+.intro-col p+p{margin-top:1.1rem}
+.intro-col.zh p{font-family:'Noto Serif SC',serif;font-size:1rem;line-height:2.05;text-align:justify}
+
+.parallax-divider{height:260px;background:var(--ink);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.parallax-text{font-family:'Noto Serif SC',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;color:rgba(255,255,255,0.05);letter-spacing:0.15em;white-space:nowrap;will-change:transform;user-select:none}
+.parallax-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.5rem;z-index:2;text-align:center;padding:0 6vw}
+.parallax-center .tag{font-size:0.72rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(196,176,238,0.85)}
+.parallax-center .big{font-family:'Noto Serif SC',serif;font-size:clamp(1.2rem,2.5vw,2rem);color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.08em}
+
+footer{background:var(--ink);border-top:1px solid rgba(196,176,238,0.18);padding:3rem 10vw;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem}
+.footer-brand .zh{font-family:'Noto Serif SC',serif;color:var(--gold);font-size:1rem}
+.footer-brand .en{font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:0.14em;text-transform:uppercase;margin-top:2px}
+footer p{color:rgba(255,255,255,0.3);font-size:0.75rem}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal-left.visible{opacity:1;transform:none}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal-right.visible{opacity:1;transform:none}
+
+[id]{scroll-margin-top:var(--nav-h)}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .intro-grid{grid-template-columns:1fr}
+  .intro-col{padding:2.2rem 1.6rem}
+  .section{padding:5rem 6vw}
+  .hero-content{padding:0 6vw}
+  footer{padding:2.5rem 6vw}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<nav id="mainNav" class="top">
+  <a class="nav-brand" href="#top">
+    <div class="nav-logo">♪</div>
+    <div class="nav-brand-text">
+      <span class="zh">女子合唱团</span>
+      <span class="en">Lady Singer Calgary Society</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#top" class="active">Home</a></li>
+    <li><a href="#about">About 简介</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#top" onclick="closeMobile()">Home</a>
+  <a href="#about" onclick="closeMobile()">About 简介</a>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <canvas id="heroCanvas" class="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-eyebrow" id="he1">Est. 2024 · 成立于 2024 年</div>
+      <h1 class="hero-h1" id="he2">
+        女子<span class="gold">合唱团</span>
+        <span class="thin">Lady Singer Calgary Society</span>
+      </h1>
+      <p class="hero-desc" id="he3">一群热爱歌唱的优秀女性，用歌声谱写动人篇章。<br>Passionate singers bringing life, heart and harmony to every piece.</p>
+      <div class="hero-btns" id="he4">
+        <a class="btn-primary" href="#about">About Us 关于我们</a>
+      </div>
+    </div>
+    <div class="hero-scroll" id="heroScroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="intro section" id="about">
+    <p class="section-eyebrow reveal">About Us · 合唱团简介</p>
+    <h2 class="section-title reveal">女子合唱团 <em>Lady Singer Calgary Society</em></h2>
+    <div class="intro-grid">
+      <div class="intro-col zh reveal-left" lang="zh-CN">
+        <h3>女子合唱团简介</h3>
+        <p>女子合唱团成立于 2024 年，由一群热爱歌唱的优秀女性组成。她们来自社会各行各业，既是专业领域的佼佼者，也是舞台上真诚的表演者。她们在繁忙的工作与生活之余，依然坚持投入排练，以饱满的热情和丰富的人生阅历诠释每一首乐曲。</p>
+        <p>自成立以来，女子合唱团已多次受邀参加大型演出，并凭借优美的和声与真挚的表达赢得观众的赞誉。愿她们在音乐的道路上不断追寻与超越，用歌声谱写出更加辉煌与动人的篇章。</p>
+      </div>
+      <div class="intro-col reveal-right" lang="en">
+        <h3>About Lady Singer Calgary Society</h3>
+        <p>Lady Singer Calgary Society was founded in 2024 by a group of passionate singers who share a deep love for music. Coming from diverse professional backgrounds, these remarkable women are leaders in their fields and devoted performers on stage. In their spare time, they dedicate themselves wholeheartedly to rehearsals, bringing their life experiences and emotions into every piece they sing.</p>
+        <p>Since its founding, the choir has been invited to perform at numerous major events, earning high praise for its harmonious voices and heartfelt interpretations. We look forward to their continued journey in music, as they create ever more inspiring and moving chapters through song.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="parallax-divider">
+    <div class="parallax-text" id="parallaxText">女子合唱团 · LADY SINGER · 女子合唱团 · LADY SINGER · 女子合唱团 ·&nbsp;</div>
+    <div class="parallax-center">
+      <span class="tag">Since 2024</span>
+      <div class="big">用歌声谱写动人篇章</div>
+      <span class="tag">Moving chapters through song</span>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-brand">
+    <div class="zh">女子合唱团</div>
+    <div class="en">Lady Singer Calgary Society</div>
+  </div>
+  <p>© <span id="year">2026</span> Lady Singer Calgary Society · ladysinger.org</p>
+</footer>
+
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+
+// Cursor glow
+document.addEventListener('mousemove',e=>{
+  const g=document.getElementById('cursorGlow');
+  g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';
+});
+
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').className=window.scrollY>30?'scrolled':'top';
+},{passive:true});
+
+// Mobile menu
+function toggleMobile(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobile(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// Hero canvas — floating musical notes
+(function(){
+  const canvas=document.getElementById('heroCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  const notes=['♩','♪','♫','♬'];
+  const particles=Array.from({length:45},()=>({
+    x:Math.random()*1600,y:Math.random()*900,
+    vx:(Math.random()-0.5)*0.25,vy:-Math.random()*0.35-0.08,
+    size:Math.random()*20+7,
+    opacity:Math.random()*0.18+0.04,
+    char:notes[Math.floor(Math.random()*4)]
+  }));
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      ctx.save();ctx.globalAlpha=p.opacity;
+      ctx.fillStyle='#D9CCF7';ctx.font=p.size+'px serif';
+      ctx.fillText(p.char,p.x%W,((p.y%H)+H)%H);
+      ctx.restore();
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.y<-30)p.y=H+30;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// Hero entrance
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('he1').classList.add('show'),200);
+  setTimeout(()=>document.getElementById('he2').classList.add('show'),420);
+  setTimeout(()=>document.getElementById('he3').classList.add('show'),700);
+  setTimeout(()=>document.getElementById('he4').classList.add('show'),920);
+  setTimeout(()=>document.getElementById('heroScroll').classList.add('show'),1400);
+});
+
+// Scroll reveal
+(function(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+    });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obs.observe(el));
+})();
+
+// Active nav link on scroll
+(function(){
+  const links=[...document.querySelectorAll('.nav-links a')];
+  const targets=links.map(a=>document.querySelector(a.getAttribute('href')));
+  window.addEventListener('scroll',()=>{
+    let idx=0;
+    targets.forEach((t,i)=>{if(t&&t.getBoundingClientRect().top<window.innerHeight*0.4)idx=i;});
+    links.forEach((a,i)=>a.classList.toggle('active',i===idx));
+  },{passive:true});
+})();
+
+// Parallax scrolling text
+window.addEventListener('scroll',()=>{
+  const pt=document.getElementById('parallaxText');
+  if(pt)pt.style.transform='translateX(-'+(window.scrollY*0.07%50)+'%)';
+},{passive:true});
+</script>
+</body>
+</html>
