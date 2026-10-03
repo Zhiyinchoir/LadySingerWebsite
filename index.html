@@ -315,7 +315,7 @@ setInterval(()=>{
 // Performance galleries from Google Drive.
 // Put one sub-folder per event inside the parent folder, named "YYYY-MM-DD Event title"
 // (e.g. "2026-06-21 Alberta Choral Festival"), or "YYYY-MM Event title" when the exact day
-// is unknown (shown as e.g. "August 2026"). Newest events are shown first,
+// is unknown (shown as e.g. "August 2026"), or "YYYY Title" for a whole year. Newest events are shown first,
 // photos inside each folder are sorted by file name. Folders and photos must be shared as
 // "Anyone with the link can view". A folder named "Weekly Practice ..." is shown last;
 // any other folder without a leading date is ignored.
@@ -343,10 +343,10 @@ const DRIVE_CONFIG={
     return files;
   }
   function parseName(name){
-    const m=name.match(/^(\d{4})-(\d{2})(?:-(\d{2}))?\s*[-–·]?\s*(.*)$/);
+    const m=name.match(/^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?\s*[-–·]?\s*(.*)$/);
     if(!m)return{date:'',title:name};
-    const d=new Date(+m[1],+m[2]-1,+(m[3]||1));
-    const fmt=m[3]?{year:'numeric',month:'long',day:'numeric'}:{year:'numeric',month:'long'};
+    const d=new Date(+m[1],+(m[2]||1)-1,+(m[3]||1));
+    const fmt=m[3]?{year:'numeric',month:'long',day:'numeric'}:m[2]?{year:'numeric',month:'long'}:{year:'numeric'};
     return{date:d.toLocaleDateString('en-US',fmt),title:m[4]||name};
   }
   function render(ev,i){
@@ -365,8 +365,8 @@ const DRIVE_CONFIG={
   }
   (async()=>{
     try{
-      // Only folders named "YYYY-MM-DD ...", "YYYY-MM ..." or "Weekly Practice ..." are shown; anything else is ignored.
-      const dated=n=>/^\d{4}-\d{2}(-\d{2})?(?!\d)/.test(n);
+      // Only folders named "YYYY-MM-DD ...", "YYYY-MM ...", "YYYY ..." or "Weekly Practice ..." are shown; anything else is ignored.
+      const dated=n=>/^\d{4}(-\d{2}(-\d{2})?)?(?!\d|-\d)/.test(n);
       const practice=n=>/^weekly practice/i.test(n);
       const folders=(await list(`'${parentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,'name')).filter(f=>dated(f.name)||practice(f.name));
       const events=(await Promise.all(folders.map(async f=>({name:f.name,
