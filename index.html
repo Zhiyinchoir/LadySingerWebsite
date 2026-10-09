@@ -315,7 +315,8 @@ setInterval(()=>{
 // Performance galleries from Google Drive.
 // Put one sub-folder per event inside the parent folder, named "YYYY-MM-DD Event title"
 // (e.g. "2026-06-21 Alberta Choral Festival"), or "YYYY-MM Event title" when the exact day
-// is unknown (shown as e.g. "August 2026"), or "YYYY Title" for a whole year. Newest events are shown first,
+// is unknown (shown as e.g. "August 2026"), or "YYYY Title" for a whole year. The dashes are optional
+// ("20261025 Title", "202610 Title"). Newest events are shown first,
 // photos inside each folder are sorted by file name. Folders and photos must be shared as
 // "Anyone with the link can view". A folder named "Weekly Practice ..." is shown last;
 // any other folder without a leading date is ignored.
@@ -343,11 +344,12 @@ const DRIVE_CONFIG={
     return files;
   }
   function parseName(name){
-    const m=name.match(/^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?\s*[-–·]?\s*(.*)$/);
-    if(!m)return{date:'',title:name};
+    const m=name.match(/^(\d{4})(?:-?(\d{2})(?:-?(\d{2}))?)?(?!\d|-\d)\s*[-–·]?\s*(.*)$/);
+    if(!m||m[2]&&(m[2]<1||m[2]>12)||m[3]&&(m[3]<1||m[3]>31))return{date:'',key:'',title:name};
     const d=new Date(+m[1],+(m[2]||1)-1,+(m[3]||1));
     const fmt=m[3]?{year:'numeric',month:'long',day:'numeric'}:m[2]?{year:'numeric',month:'long'}:{year:'numeric'};
-    return{date:d.toLocaleDateString('en-US',fmt),title:m[4]||name};
+    // key sorts events by date whichever way the folder name writes it; a missing month or day sorts as 00.
+    return{date:d.toLocaleDateString('en-US',fmt),key:m[1]+(m[2]||'00')+(m[3]||'00'),title:m[4]||name};
   }
   function render(ev,i){
     const id='drive-'+i,{date,title}=parseName(ev.name),n=ev.photos.length;
@@ -365,15 +367,15 @@ const DRIVE_CONFIG={
   }
   (async()=>{
     try{
-      // Only folders named "YYYY-MM-DD ...", "YYYY-MM ...", "YYYY ..." or "Weekly Practice ..." are shown; anything else is ignored.
-      const dated=n=>/^\d{4}(-\d{2}(-\d{2})?)?(?!\d|-\d)/.test(n);
+      // Only folders named "YYYY-MM-DD ...", "YYYY-MM ...", "YYYY ..." (dashes optional) or "Weekly Practice ..." are shown; anything else is ignored.
+      const dated=n=>!!parseName(n).key;
       const practice=n=>/^weekly practice/i.test(n);
       const folders=(await list(`'${parentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,'name')).filter(f=>dated(f.name)||practice(f.name));
       const events=(await Promise.all(folders.map(async f=>({name:f.name,
         photos:await list(`'${f.id}' in parents and mimeType contains 'image/' and trashed=false`,'name')})))).filter(e=>e.photos.length);
       if(!events.length)return;
       // Dated events newest first, Weekly Practice last.
-      events.sort((x,y)=>practice(x.name)-practice(y.name)||y.name.localeCompare(x.name));
+      events.sort((x,y)=>practice(x.name)-practice(y.name)||parseName(y.name).key.localeCompare(parseName(x.name).key)||x.name.localeCompare(y.name));
       document.getElementById('photos').innerHTML=events.map(render).join('\n');
       initReveal();
     }catch(e){console.warn('Google Drive galleries unavailable.',e);}
